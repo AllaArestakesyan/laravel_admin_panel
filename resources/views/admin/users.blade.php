@@ -68,7 +68,7 @@
                         @endif
                         @if(auth()->user()->getRoleNames()->first() == "super-admin")
                             <td class="px-4 py-2 border">
-                                <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')
@@ -87,8 +87,4 @@
             </tbody>
         </table>
     </main>
-@endsection
-
-@section('role')
-    {{ auth()->user()->getRoleNames()->first() }}
 @endsection

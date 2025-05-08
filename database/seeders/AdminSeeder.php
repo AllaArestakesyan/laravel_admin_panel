@@ -44,17 +44,18 @@ class AdminSeeder extends Seeder
 
         $admin->givePermissionTo([
             'view users',
+            'view skill',
+            'view job',
             'edit content',
             'create skill',
-            'view skill',
             'edit skill',
             'delete skill'
         ]);
 
         $manager->givePermissionTo([
             'view skill',
-            'create job',
             'view job',
+            'create job',
             'edit job',
             'delete job',
         ]);

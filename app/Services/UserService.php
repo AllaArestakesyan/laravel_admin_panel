@@ -41,7 +41,10 @@ class UserService implements UserServiceInterface
     {
         $user = User::find($id); 
         if ($user) {
-            $user->update($data); 
+            $user->update([
+                "name"=> $data["name"],
+            ]); 
+
             return $user;
         }
         return null;

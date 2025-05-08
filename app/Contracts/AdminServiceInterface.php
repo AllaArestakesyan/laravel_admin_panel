@@ -49,6 +49,16 @@ interface AdminServiceInterface
      */
     public function update(int $id, array $data): ?Admin;
   
+  
+    /**
+     * Summary of update Password
+     * 
+     * @param int $id
+     * @param array $data
+     * @return void
+     */
+    public function updatePassword(int $id, array $data): ?Admin;
+  
     /**
      * Delete a admin by its ID.
      *
@@ -56,4 +66,14 @@ interface AdminServiceInterface
      * @return bool
      */
     public function delete(int $id): bool;
+   
+    /**
+     * Summary of removeRole
+     * 
+     * @param int $id
+     * @return void
+     */
+    public function removeRole(int $id, string $role): array;
+
+    
 }

@@ -1,10 +1,10 @@
 @extends("layouts.app")
 
-@section("title", "Admin Profile")
+@section("title", "Create Skill")
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome, {{ auth()->user()->name }}</h1>
+        <h1 class="text-2xl font-bold mb-4">Create Skills</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -32,13 +32,15 @@
             </div>
         @endif
 
-        <div class="bg-white rounded-xl shadow p-6 w-full max-w-xl">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Your Profile</h2>
-            <div class="space-y-2 text-gray-600">
-                <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
-                <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
-                <p><strong>Role:</strong> {{ implode(", ",auth()->user()->getRoleNames()->toArray())}}</p>
+        <form action="{{ route('admin.skills.store') }}" method="POST">
+            @csrf
+
+            <div>
+                <label class="block">Name</label>
+                <input type="text" name="name" class="border p-2 w-full">
             </div>
-        </div>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2">Save</button>
+        </form>
     </main>
 @endsection

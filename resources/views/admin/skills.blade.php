@@ -1,10 +1,10 @@
 @extends("layouts.app")
 
-@section("title", "Admins")
+@section("title", "Skills")
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-2xl font-bold mb-4">All Admins And Managers</h1>
+        <h1 class="text-2xl font-bold mb-4">All Skills</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -32,58 +32,26 @@
             </div>
         @endif
 
-
         <table class="min-w-full bg-white border border-gray-200 shadow">
             <thead>
                 <tr class="bg-gray-100 text-left">
                     <th class="px-4 py-2 border">#</th>
                     <th class="px-4 py-2 border">Name</th>
-                    <th class="px-4 py-2 border">Email</th>
-                    <th class="px-4 py-2 border">Role</th>
-                    <th class="px-4 py-2 border">Registered At</th>
-                    @if(auth()->user()->getRoleNames()->first() == "super-admin")
+                    @if(auth()->user()->getRoleNames()->first() == "super-admin" || auth()->user()->getRoleNames()->first() == "admin")
                         <th class="px-4 py-2 border">Edit</th>
                         <th class="px-4 py-2 border">Delete</th>
                     @endif
                 </tr>
             </thead>
             <tbody>
-                @foreach($admins as $index => $admin)
+                @foreach($skills as $index => $skill)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 border">{{ $admin->id }}</td>
-                        <td class="px-4 py-2 border">{{ $admin->name }}</td>
-                        <td class="px-4 py-2 border">{{ $admin->email }}</td>
-                        <!-- <td class="px-4 py-2 border">{{ $admin->roles->pluck('name')->join(', ') }}</td> -->
-                        <td class="px-4 py-2 border">
+                        <td class="px-4 py-2 border">{{ $skill->id }}</td>
+                        <td class="px-4 py-2 border">{{ $skill->name }}</td>
 
-                            @foreach ($admin->roles->pluck('name') as $role)
-                                <div>
-                                    <form action="{{ route('admin.role.remove', $admin->id) }}" method="POST"
-                                        style="display:inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="hidden" name="role" value="{{ $role }}">
-
-                                        <span style="display: flex;align-items:center; gap:20px">
-                                            <span>
-                                                {{ $role }}
-                                            </span>
-                                            <button type="submit" class="text-red-600 hover:underline text-sm">
-                                                <svg style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                    viewBox="0 -960 960 960" width="24px" fill="#900">
-                                                    <path
-                                                        d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </form>
-                                </div>
-                            @endforeach
-                        </td>
-                        <td class="px-4 py-2 border">{{ $admin->created_at->format('Y-m-d') }}</td>
                         @if(auth()->user()->getRoleNames()->first() == "super-admin" || auth()->user()->getRoleNames()->first() == "admin")
                             <td class="px-4 py-2 border">
-                                <a href="admins/{{$admin->id}}/edit">
+                                <a href="skills/{{$skill->id}}/edit">
                                     <svg style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" height="24px"
                                         viewBox="0 -960 960 960" width="24px" fill="#900">
                                         <path
@@ -91,10 +59,8 @@
                                     </svg>
                                 </a>
                             </td>
-                        @endif
-                        @if(auth()->user()->getRoleNames()->first() == "super-admin")
                             <td class="px-4 py-2 border">
-                                <form action="{{ route('admin.admins.destroy', $admin->id) }}" method="POST"
+                                <form action="{{ route('admin.skills.destroy', $skill->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')

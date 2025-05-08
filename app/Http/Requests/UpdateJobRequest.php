@@ -10,6 +10,16 @@ use Illuminate\Http\JsonResponse;
 
 class UpdateJobRequest extends FormRequest
 {
+     
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -20,21 +30,10 @@ class UpdateJobRequest extends FormRequest
         return [
             "title" => "required|string",
             "description" => "required|string",
-            "budget" => "required|numeric|min:0"
+            "budget" => "required|numeric|min:0",
+            "skills" => "required|array",
+            "skills.*" => "numeric|exists:skills,id",
         ];
     }
 
-    /**
-     * Summary of failedValidation
-     * 
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return never
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json(['message' => $validator->errors()], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        );
-    }
 }

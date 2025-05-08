@@ -1,21 +1,22 @@
 @extends("layouts.app")
 
-@section("title", "User Edit")
+@section("title", "Adit Skill")
 
 @section("content")
     <main class="flex-1 p-10">
-        <h2 class="text-xl font-bold mb-4">Edit User</h2>
+        <h1 class="text-2xl font-bold mb-4">Edit Skill</h1>
 
-        <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="space-y-4">
+        <form action="{{ route('admin.skills.update', $skill->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
             <div>
                 <label class="block">Name</label>
-                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="border p-2 w-full">
+                <input type="text" name="name" value="{{ old('name', $skill->name) }}" class="border p-2 w-full">
             </div>
 
             <button type="submit" class="bg-blue-500 text-white px-4 py-2">Update</button>
         </form>
+
     </main>
 @endsection

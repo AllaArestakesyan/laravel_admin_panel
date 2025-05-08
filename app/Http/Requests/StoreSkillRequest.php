@@ -3,13 +3,18 @@
 namespace App\Http\Requests;
 
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
 
 class StoreSkillRequest extends FormRequest
 {
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -21,19 +26,5 @@ class StoreSkillRequest extends FormRequest
         return [
             "name"=>"required|string|unique:skills,name"
         ];
-    }
-
-    /**
-     * Summary of failedValidation
-     * 
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return never
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json(['message' => $validator->errors()], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        );
     }
 }

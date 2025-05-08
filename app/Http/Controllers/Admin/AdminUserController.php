@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Contracts\UserServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AdminUserController extends Controller
 {
@@ -22,7 +23,7 @@ class AdminUserController extends Controller
     /**
      * Summary of index
      * 
-     * @return \Illuminate\Contracts\View\View
+     * @return View
      */
     public function index(): View
     {
@@ -34,7 +35,7 @@ class AdminUserController extends Controller
      * Summary of edit
      * 
      * @param int $id
-     * @return \Illuminate\Contracts\View\View
+     * @return View
      */
     public function edit(int $id): View
     {
@@ -46,14 +47,15 @@ class AdminUserController extends Controller
     /**
      * Summary of update
      * 
-     * @param \App\Http\Requests\UpdateUserRequest $request
+     * @param UpdateUserRequest $request
      * @param mixed $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $request, $id): RedirectResponse
     {
         $data = $request->all();
         $user = $this->userService->update($id, $data);
+
         if ($user) {
 
             return redirect()->route('admin.users')->with('success', 'User updated successfully.');
@@ -66,9 +68,9 @@ class AdminUserController extends Controller
      * Summary of destroy
      * 
      * @param mixed $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $success = $this->userService->delete($id);
 

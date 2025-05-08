@@ -14,9 +14,20 @@ class JobService implements JobServiceInterface
      * @param array $data
      * @return Job
      */
-    public function create(array $data): Job
+    public function create(array $data, int $managerId): Job
     {
-        return Job::create($data);
+        $job = Job::create([
+            "title" => $data["title"],
+            "description" => $data["description"],
+            "budget" => $data["budget"],
+            "assigned_to" => $managerId,
+        ]);
+
+        if ($data['skills']) {
+            $job->skills()->attach($data["skills"]);
+        }
+
+        return $job;
     }
 
     /**
@@ -26,7 +37,7 @@ class JobService implements JobServiceInterface
      */
     public function findAll(): Collection
     {
-        return Job::all(); 
+        return Job::all();
     }
 
     /**
@@ -49,11 +60,21 @@ class JobService implements JobServiceInterface
      */
     public function update(int $id, array $data): ?Job
     {
-        $job = Job::find($id); 
+        $job = Job::find($id);
         if ($job) {
-            $job->update($data); 
+            $job->update([
+                "title" => $data["title"],
+                "description" => $data["description"],
+                "budget" => $data["budget"],
+            ]);
+
+            if ($data['skills']) {
+                $job->skills()->attach($data["skills"]);
+            }
+
             return $job;
         }
+
         return null;
     }
 
@@ -65,6 +86,28 @@ class JobService implements JobServiceInterface
      */
     public function delete(int $id): bool
     {
-        return Job::destroy($id) > 0; 
+        return Job::destroy($id) > 0;
+    }
+
+    /**
+     * Summary of removeSkills
+     * 
+     * @param array $data
+     * @param int $id
+     * @return void
+     */
+    public function removeSkills(int $id, array $data): ?Job
+    {
+        $job = Job::find($id);
+        if ($job) {
+
+            if ($data['skills']) {
+                $job->skills()->detach($data["skills"]);
+            }
+
+            return $job;
+        }
+
+        return null;
     }
 }

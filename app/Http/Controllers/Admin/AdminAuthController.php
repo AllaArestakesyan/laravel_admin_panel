@@ -6,12 +6,12 @@ use App\Contracts\AdminServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInUserRequest;
 use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Admin;
-use Hash;
+use App\Http\Requests\UpdateAdminRequest;
+use App\Http\Requests\UpdateUserPasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class AdminAuthController extends Controller
 {
@@ -32,7 +32,7 @@ class AdminAuthController extends Controller
      * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function showLoginForm():View
+    public function showLoginForm(): View
     {
         return view('admin.auth.login');
     }
@@ -43,7 +43,7 @@ class AdminAuthController extends Controller
      * @param \App\Http\Requests\SignInUserRequest $request
      * @return mixed|\Illuminate\Http\RedirectResponse
      */
-    public function login(SignInUserRequest $request):mixed
+    public function login(SignInUserRequest $request): mixed
     {
         $data = $request->only('email', 'password');
         $auth = $this->adminService->signIn($data);
@@ -62,7 +62,7 @@ class AdminAuthController extends Controller
      * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function showRegisterForm():View
+    public function showRegisterForm(): View
     {
         return view('admin.auth.register');
     }
@@ -73,14 +73,14 @@ class AdminAuthController extends Controller
      * @param \App\Http\Requests\StoreAdminRequest $request
      * @return mixed|\Illuminate\Http\RedirectResponse
      */
-    public function register(StoreAdminRequest $request):mixed
+    public function register(StoreAdminRequest $request): mixed
     {
         $data = $request->all();
         $auth = $this->adminService->signUp($data);
 
         if ($auth) {
 
-            return redirect()->route('admin.users');
+            return redirect()->route('admin.admins');
         }
 
         return back()->withErrors([
@@ -94,7 +94,7 @@ class AdminAuthController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\RedirectResponse
      */
-    public function logout(Request $request):mixed
+    public function logout(Request $request): mixed
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
@@ -108,12 +108,22 @@ class AdminAuthController extends Controller
      * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function profile():View
+    public function profile(): View
     {
         $admin = Auth::guard('web')->user();
         return view('admin.profile', compact('admin'));
     }
 
+
+    /**
+     * Summary of settings
+     * 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function settings(): View
+    {
+        return view('admin.settings');
+    }
 
 
     /**
@@ -136,18 +146,19 @@ class AdminAuthController extends Controller
     public function edit(int $id): View
     {
         $admin = $this->adminService->findById($id);
+        $roles = Role::where('name', '!=', 'super-admin')->get();
 
-        return view('admin.adminEdit', compact('admin'));
+        return view('admin.adminEdit', compact('admin', "roles"));
     }
 
     /**
      * Summary of update
      * 
      * @param \App\Http\Requests\UpdateUserRequest $request
-     * @param mixed $id
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateAdminRequest $request, int $id)
     {
         $data = $request->all();
         $admin = $this->adminService->update($id, $data);
@@ -161,12 +172,53 @@ class AdminAuthController extends Controller
     }
 
     /**
+     * Summary of settings Update
+     * 
+     * @param \App\Http\Requests\UpdateAdminRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function settingsUpdate(UpdateAdminRequest $request)
+    {
+        $data = $request->all();
+        $admin = $this->adminService->update($request->user()->id, $data);
+
+        if ($admin) {
+
+            return redirect()->route('admin.profile')->with('success', 'Admin updated successfully.');
+        }
+
+        return redirect()->route('admin.profile')->with('error', 'Failed to update admin.');
+    }
+   
+   
+    /**
+     * Summary of settingsUpdatePassword
+     * 
+     * @param \App\Http\Requests\UpdateUserPasswordRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function settingsUpdatePassword(UpdateUserPasswordRequest $request)
+    {
+        $data = $request->all();
+        $admin = $this->adminService->updatePassword($request->user()->id, $data);
+
+        if ($admin) {
+
+            return redirect()->route('admin.profile')->with('success', 'Admin password updated successfully.');
+        }
+
+        return redirect()->route('admin.profile')->with('error', 'Failed to update admin.');
+    }
+
+    /**
      * Summary of destroy
      * 
      * @param mixed $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $success = $this->adminService->delete($id);
 
@@ -175,5 +227,17 @@ class AdminAuthController extends Controller
         }
 
         return redirect()->route('admin.admins')->with('success', 'Admin deleted successfully.');
+    }
+
+    public function removeRole(int $id, Request $request)
+    {
+        $role = $request->input('role');
+        $data = $this->adminService->removeRole($id, $role);
+
+        if ($data['error']) {
+            return back()->with('error', $data['message']);
+        }
+
+        return back()->with('success', $data['message']);
     }
 }

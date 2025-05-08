@@ -46,7 +46,7 @@ class AdminService implements AdminServiceInterface
             return null;
         }
 
-        if (Auth::guard('web')->attempt(['email' =>$data['email'], 'password' =>$data['password']])) {
+        if (Auth::guard('web')->attempt(['email' => $data['email'], 'password' => $data['password']])) {
             return $data;
         }
 
@@ -60,7 +60,11 @@ class AdminService implements AdminServiceInterface
      */
     public function findAll(): Collection
     {
-        return Admin::all(); 
+        return Admin::with('roles')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'super-admin');
+            })
+            ->get();
     }
 
     /**
@@ -83,23 +87,44 @@ class AdminService implements AdminServiceInterface
      */
     public function update(int $id, array $data): ?Admin
     {
-        $admin = Admin::find($id); 
+        $admin = Admin::find($id);
         if ($admin) {
-            $admin->update($data); 
+
+            $admin->update([
+                'name' => $data['name'],
+            ]);
+
+            if (isset($data['role'])) {
+
+                $admin->assignRole($data['role']);
+
+            }
+
             return $admin;
         }
         return null;
     }
 
-
     /**
-     * Update an existing Admin avatar.
-     *
+     * Summary of update Password
+     * 
      * @param int $id
      * @param array $data
-     * @return Admin|null
+     * @return \Illuminate\Database\Eloquent\Builder<Admin>|null
      */
+    public function updatePassword(int $id, array $data): ?Admin
+    {
+        $admin = Admin::find($id);
 
+        if (!$admin || !Hash::check($data["old_password"], $admin->password)) {
+
+            return null;
+        }
+        $admin->password = Hash::make($data["password"]);
+        $admin->save();
+
+        return $admin;
+    }
 
     /**
      * Delete a admin by its ID.
@@ -109,7 +134,30 @@ class AdminService implements AdminServiceInterface
      */
     public function delete(int $id): bool
     {
-        return Admin::destroy($id) > 0; 
+        return Admin::destroy($id) > 0;
+    }
+
+
+    public function removeRole(int $id, string $role): array
+    {
+        $admin = Admin::findOrFail($id);
+
+        if (!$admin) {
+            return ["error" => true, "message" => 'Admin not found.'];
+        }
+
+        if ($admin->hasRole('super-admin')) {
+            return ["error" => true, "message" => 'You cannot remove role from a super-admin.'];
+        }
+
+        if ($admin->hasRole($role)) {
+            $admin->removeRole($role);
+
+            return ["error" => false, "message" => "Role '{$role}' removed."];
+        }
+
+        return ["error" => true, "message" => 'Admin does not have that role.'];
+
     }
 
 }

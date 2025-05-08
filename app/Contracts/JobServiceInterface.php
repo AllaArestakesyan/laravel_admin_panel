@@ -14,7 +14,7 @@ interface JobServiceInterface
      * @return Job
      * 
      */
-    public function create(array $data): Job;
+    public function create(array $data, int $managerId): Job;
 
     /**
      * Get all jobs.
@@ -47,4 +47,13 @@ interface JobServiceInterface
      * @return bool
      */
     public function delete(int $id): bool;
+
+    /**
+     * Summary of removeSkills
+     * 
+     * @param array $data
+     * @param int $id
+     * @return Job|null
+     */
+    public function removeSkills(int $id, array $data): ?Job;
 }

@@ -16,7 +16,9 @@ class SkillService implements SkillServiceInterface
      */
     public function create(array $data): Skill
     {
-        return Skill::create($data);
+        return Skill::create([
+            "name"=> $data["name"],
+        ]);
     }
 
     /**
@@ -51,7 +53,10 @@ class SkillService implements SkillServiceInterface
     {
         $skill = Skill::find($id); 
         if ($skill) {
-            $skill->update($data); 
+            $skill->update([
+                "name"=> $data["name"]
+            ]); 
+
             return $skill;
         }
         return null;

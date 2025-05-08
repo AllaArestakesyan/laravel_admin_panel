@@ -5,7 +5,7 @@
 @section("content")
     <main class="flex-1 p-10">
         <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Admin Register</h2>
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Create Admin</h2>
 
             @if ($errors->any())
                 <div class="text-red-500 text-sm mb-4">
@@ -53,14 +53,9 @@
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition duration-200"
                     
                     >
-                    Register
+                    Save
                 </button>
             </form>
         </div>
     </main>
-@endsection
-
-
-@section('role')
-    {{ auth()->user()->getRoleNames()->first() }}
 @endsection
