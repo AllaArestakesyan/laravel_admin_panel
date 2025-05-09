@@ -2,9 +2,10 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: '/api/v1',
   withCredentials: true
 })
+api.defaults.withCredentials = true;
 
 api.interceptors.request.use((config) => {
   

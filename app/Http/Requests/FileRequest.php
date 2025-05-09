@@ -17,7 +17,7 @@ class FileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'avatar' => ['required', 'file', 'mimes:jpeg,png,jpg,gif', 'max:8192'],
+            'avatar' => ['required', 'file', 'mimes:jpeg,png,jpg,gif'],
         ];
     }
 

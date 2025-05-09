@@ -1,33 +1,39 @@
 <template>
-    <div class="users-list">
-        <UserCard v-for="user in users" :key="user.email" :user="user" />
-    </div>
+  <div class="users-list">
+    <UserCard v-for="user in users" :key="user.email" :user="user" />
+  </div>
 </template>
-  
-<script setup >
+
+<script>
 import UserCard from '../../components/UserCard.vue';
-import { useStore } from 'vuex'
-import { computed, onMounted } from 'vue'
 
-const store = useStore();
-
-const users = computed(() => store.getters["users"])
-
-onMounted(async () => {
-    await store.dispatch("getUsers")
-})
-
+export default {
+  components: {
+    UserCard
+  },
+  data() {
+    return {
+      users: []
+    };
+  },
+  async created() {
+    try {
+      await this.$store.dispatch("getUsers");
+      this.users = this.$store.getters["users"];
+    } catch (error) {
+      console.error("Failed to load users", error);
+    }
+  }
+};
 </script>
-  
-<style lang="scss" scoped>
-.users-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    background: #ffffff;
-    transition: background 0.3s;
 
+<style scoped lang="scss">
+.users-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  background: #ffffff;
+  transition: background 0.3s;
 }
 </style>
-  

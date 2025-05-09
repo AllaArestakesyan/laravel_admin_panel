@@ -1,10 +1,17 @@
 <template>
+  <div>
     <Menu />
     <router-view />
-
+  </div>
 </template>
 
-<script setup>
-import Menu from '../../components/Menu.vue';
+<script>
+import Menu from '../../components/Menu.vue'
 
+export default {
+  name: 'MainLayout',
+  components: {
+    Menu
+  }
+}
 </script>

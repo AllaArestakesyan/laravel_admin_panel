@@ -70,8 +70,9 @@ class UserController extends Controller
      */
     public function uploadAvatar(FileRequest $request)
     {
-        $data = $request->all();
-        $user = $this->userService->uploadAvatar($request->user()->id, $data);
+        $file = $request->file('avatar');
+        $user = $this->userService->uploadAvatar($request->user()->id, $file);
+      
         if ($user) {
             return response()->json($user);
         }

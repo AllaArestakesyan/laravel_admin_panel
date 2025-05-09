@@ -39,7 +39,7 @@ interface UserServiceInterface
      * @param array $data
      * @return User|null
      */
-    public function uploadAvatar(int $id, array $data): ?User;
+    public function uploadAvatar(int $id, mixed $data): ?User;
 
     /**
      * Delete a user by its ID.

@@ -10,10 +10,7 @@ import Skill from '../views/pages/Skill.vue'
 import Settings from '../views/pages/Settings.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import { authMiddleware } from './middleware/auth'
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 
-Vue.use(VueRouter);
 
 const routes = [
   { path: '/login', component: Login },
@@ -25,7 +22,7 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: '/profile',
+        redirect: '/login',
       },
       {
         path: 'profile',
@@ -68,13 +65,13 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach(async (to, _, next) => {
-//   if (to.meta.requiresAuth) {
-//     await authMiddleware(to, next)
+router.beforeEach(async (to, _, next) => {
+  if (to.meta.requiresAuth) {
+    await authMiddleware(to, next)
 
-//   } else {
-//     next()
-//   }
-// })
+  } else {
+    next()
+  }
+})
 
 export default router

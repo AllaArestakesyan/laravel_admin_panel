@@ -36,7 +36,7 @@ class AuthService implements AuthServiceInterface
     {
         $user = User::where('email', $data['email'])->first();
 
-        if (!$user || !Hash::check($user['password'], $user['password'])) {
+        if (!$user || !Hash::check($data['password'], $user['password'])) {
 
             return null;
         }

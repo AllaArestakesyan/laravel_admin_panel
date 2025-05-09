@@ -59,7 +59,7 @@ class UserService implements UserServiceInterface
      * @return User|null
      */
 
-    public function uploadAvatar(int $id, array $data):?User
+    public function uploadAvatar(int $id, mixed $file):?User
     {
 
         $user = User::find($id);
@@ -68,11 +68,6 @@ class UserService implements UserServiceInterface
             return null;
         }
 
-        if (!$data->avatar) {
-            return null;
-        }
-
-        $file = $data->file('avatar');
         $fileName = time() . '_' . $file->getClientOriginalName();
         $path = $file->storeAs('uploads', $fileName, 'public');
         $user->avatar = str_replace('public/', '', $path);

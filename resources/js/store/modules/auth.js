@@ -7,10 +7,14 @@ const auth = {
     namespace: true,
     state: {
         user: null,
+        done:false
     },
     mutations: {
         setCurrentUser(state, user) {
             state.currentUser = user;
+        },
+        setDone(state, done) {
+            state.done = done;
         },
         logout(state) {
             state.currentUser = null
@@ -19,9 +23,15 @@ const auth = {
     },
     actions: {
         async login({ commit }, credentials) {
+            console.log(credentials);
+            
             const { data } = await axios.post('/login', credentials)
-            Cookies.set('access_token', data.access_token)
-            return data.access_token;
+            if("access_token" in data){
+                Cookies.set('access_token', data.access_token)
+                commit("setDone", true)
+            }else{
+                commit("setDone", false)
+            }
         },
         async register({ commit }, credentials) {
             const { data } = await axios.post('/register', credentials)
@@ -53,6 +63,7 @@ const auth = {
     getters: {
         isAuthenticated: (state) => !!state.currentUser,
         currentUser: (state) => state.currentUser,
+        done: (state) => state.done,
     }
 }
 
