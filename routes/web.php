@@ -7,8 +7,12 @@ use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
+// Route::get('/{any}', function () {
+//     return view('app');
+// })->where('any', 'resources/.*');
+
 
 Route::get('/admin', function () {
     if (auth('web')->check()) {

@@ -1,9 +1,9 @@
 <template>
-    <div>Hello from Vue in Laravel!</div>
-  </template>
+  <router-view />
+</template>
   
-  <script>
-  export default {
-    name: 'App',
-  };
-  </script>
+<script>
+export default {
+  name: 'App',
+};
+</script>

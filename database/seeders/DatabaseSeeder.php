@@ -31,3 +31,7 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole('super-admin');
     }
 }
+
+
+// php artisan db:seed
+// php artisan permission:cache-reset

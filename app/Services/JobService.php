@@ -48,7 +48,7 @@ class JobService implements JobServiceInterface
      */
     public function findById(int $id): ?Job
     {
-        return Job::whereHas('skills')->with('skills')->find($id);
+        return Job::with('skills')->find($id);
     }
 
     /**

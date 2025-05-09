@@ -1,0 +1,99 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: sans-serif;
+    background: #fafbff;
+
+    >div {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        width: 320px;
+        color: #333;
+        display: grid;
+        gap: 20px;
+        transition: all 0.4s ease-in-out;
+
+        &:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            input, textarea, select {
+                width: 100%;
+                padding: 0.5rem;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: white;
+                color: #333;
+                resize: none;
+
+                &:focus {
+                    border-color: #3f51b5;
+                    outline: none;
+                }
+            }
+        }
+
+        .form-group-radio {
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3f51b5;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover:not(:disabled) {
+                background: #303f9f;
+            }
+
+            &:disabled {
+                background: #9fa8da;
+                cursor: not-allowed;
+            }
+        }
+
+        >a {
+            color: #121212;
+            transition: all 0.4s ease-in-out;
+
+            &:hover {
+                color: #3f3f72;
+                text-shadow: 1px 0 #7986cb;
+            }
+
+        }
+    }
+
+    .error {
+        color: #900;
+        font-weight: 600;
+    }
+}
