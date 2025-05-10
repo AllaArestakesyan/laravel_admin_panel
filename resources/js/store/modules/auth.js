@@ -50,6 +50,11 @@ const auth = {
             const { data } = await axios.put(`/users`, credentials)
             commit('setCurrentUser', data)
         },
+        async updateCurrentUserPasswordData({ commit }, credentials) {
+            const { data } = await axios.put(`/users/password`, credentials)
+            // commit('setCurrentUser', data)
+            return data
+        },
         async updateCurrentUserAvatar({ commit }, credentials) {
             const { data } = await axios.post(`/users/avatar`, credentials)
             commit('setCurrentUser', data)

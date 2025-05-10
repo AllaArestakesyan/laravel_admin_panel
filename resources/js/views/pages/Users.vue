@@ -20,6 +20,8 @@ export default {
     try {
       await this.$store.dispatch("getUsers");
       this.users = this.$store.getters["users"];
+      console.log(this.$store.getters["users"]);
+      
     } catch (error) {
       console.error("Failed to load users", error);
     }

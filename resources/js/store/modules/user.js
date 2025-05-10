@@ -4,12 +4,11 @@ const user = {
     namespace:true,
     state: {
         user: null,
-        currentUser: null,
         users: []
     },
     mutations: {
-        setUsers(state, user) {
-            state.users = user;
+        setUsers(state, users) {
+            state.users = users;
         },
         setUser(state, user) {
             state.user = user;

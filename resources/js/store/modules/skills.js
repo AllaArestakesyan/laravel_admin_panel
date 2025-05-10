@@ -4,12 +4,11 @@ const skill = {
     namespace:true,
     state: {
         skill: null,
-        currentskill: null,
         skills: []
     },
     mutations: {
-        setSkills(state, skill) {
-            state.skills = skill;
+        setSkills(state, skills) {
+            state.skills = skills;
         },
         setSkill(state, skill) {
             state.skill = skill;
@@ -20,7 +19,7 @@ const skill = {
             const {data} = await axios.get('/skills')
             commit('setSkills', data)
         },
-        async getskill({ commit }, id) {
+        async getSkill({ commit }, id) {
             const {data} = await axios.get(`/skills/${id}`)
             commit('setSkill', data)
         },

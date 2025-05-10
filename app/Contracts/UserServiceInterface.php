@@ -32,6 +32,16 @@ interface UserServiceInterface
      */
     public function update(int $id, array $data): ?User;
 
+        /**
+     * Summary of update Password
+     * 
+     * @param int $id
+     * @param array $data
+     * @return void
+     */
+    public function updatePassword(int $id, array $data): ?User;
+  
+ 
     /**
      * Update an existing user avatar.
      *

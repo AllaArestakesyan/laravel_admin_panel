@@ -22,11 +22,12 @@ Route::prefix('v1')->group(function () {
             Route::get('', [UserController::class, "index"]);
             Route::get('/{id}', [UserController::class, "show"]);
             Route::put('', [UserController::class, "update"]);
+            Route::put('/password', [UserController::class, "updatePassword"]);
             Route::post('/avatar', [UserController::class, "uploadAvatar"]);
             Route::delete('', [UserController::class, "destroy"]);
         });
 
-        Route::prefix(prefix: "skills")->group(function () {
+        Route::prefix( "skills")->group(function () {
             Route::get("", [SkillController::class, "index"]);
             Route::get("/{id}", [SkillController::class, "show"]);
         });

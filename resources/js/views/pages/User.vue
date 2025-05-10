@@ -1,12 +1,11 @@
 <template>
   <div class="user-details" v-if="user">
     <div class="card-box">
-      <img :src="'http://127.0.0.1:8000/storage/' + user.avatar" alt="User avatar" class="avatar" />
+      <img 
+      :src="user.avatar ? '/storage/' + user.avatar : '/storage/uploads/user.png'"
+       alt="User avatar" class="avatar" />
       <h2>{{ user.name }} {{ user.surname }}</h2>
       <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Phone:</strong> +{{ user.country_code }} {{ user.phone_number }}</p>
-      <p><strong>Country:</strong> {{ user.country_name }}</p>
-      <p><strong>Role:</strong> {{ user.role }}</p>
     </div>
 
   </div>

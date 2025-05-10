@@ -39,7 +39,7 @@ class SkillService implements SkillServiceInterface
      */
     public function findById(int $id): ?Skill
     {
-        return Skill::find($id);
+        return Skill::with('jobs')->find($id);
     }
 
     /**

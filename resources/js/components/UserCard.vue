@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <img
-      :src="'/storage/' + user.avatar"
+      :src="user.avatar ? '/storage/' + user.avatar : '/storage/uploads/user.png'"
       alt="User avatar"
       class="avatar"
       @error="onImageError"

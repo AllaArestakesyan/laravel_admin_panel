@@ -7,6 +7,8 @@ import Jobs from '../views/pages/Jobs.vue'
 import Job from '../views/pages/Job.vue'
 import Skills from '../views/pages/Skills.vue'
 import Skill from '../views/pages/Skill.vue'
+import Users from '../views/pages/Users.vue'
+import User from '../views/pages/User.vue'
 import Settings from '../views/pages/Settings.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import { authMiddleware } from './middleware/auth'
@@ -38,6 +40,16 @@ const routes = [
         path: 'skills/:id',
         name: 'skill',
         component: Skill,
+      },
+      {
+        path: 'users',
+        name: 'users',
+        component: Users,
+      },
+      {
+        path: 'users/:id',
+        name: 'user',
+        component: User,
       },
       {
         path: 'jobs',

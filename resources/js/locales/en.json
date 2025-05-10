@@ -1,0 +1,10 @@
+{
+  "menu": {
+    "Profile": "Profile",
+    "Users": "Users",
+    "Skills": "Skills",
+    "Jobs": "Jobs",
+    "Settings": "Settings",
+    "Logout":"Log Out"
+  }
+}

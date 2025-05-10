@@ -4,12 +4,11 @@ const job = {
     namespace:true,
     state: {
         job: null,
-        currentjob: null,
         jobs: []
     },
     mutations: {
-        setJobs(state, job) {
-            state.jobs = job;
+        setJobs(state, jobs) {
+            state.jobs = jobs;
         },
         setJob(state, job) {
             state.job = job;
