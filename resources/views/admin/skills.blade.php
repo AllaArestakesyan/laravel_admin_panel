@@ -4,7 +4,7 @@
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-2xl font-bold mb-4">All Skills</h1>
+        <h1 class="text-2xl font-bold mb-4">{{__("admin.skills")}}</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -36,10 +36,10 @@
             <thead>
                 <tr class="bg-gray-100 text-left">
                     <th class="px-4 py-2 border">#</th>
-                    <th class="px-4 py-2 border">Name</th>
+                    <th class="px-4 py-2 border">{{__("admin.name")}}</th>
                     @if(auth()->user()->getRoleNames()->first() == "super-admin" || auth()->user()->getRoleNames()->first() == "admin")
-                        <th class="px-4 py-2 border">Edit</th>
-                        <th class="px-4 py-2 border">Delete</th>
+                        <th class="px-4 py-2 border">{{__("admin.edit")}}</th>
+                        <th class="px-4 py-2 border">{{__("admin.delete")}}</th>
                     @endif
                 </tr>
             </thead>

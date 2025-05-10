@@ -4,7 +4,7 @@
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-2xl font-bold mb-4">Edit Job</h1>
+        <h1 class="text-2xl font-bold mb-4">{{__("admin.edit")}} {{__("admin.job")}}</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -37,23 +37,23 @@
             @method('PUT')
 
             <div>
-                <label class="block">Title</label>
+                <label class="block">{{__("admin.title")}}</label>
                 <input type="text" name="title" value="{{ old('name', $job->title) }}" class="border p-2 w-full">
             </div>
 
             <div>
-                <label class="block">Description</label>
+                <label class="block">{{__("admin.description")}}</label>
                 <textarea type="text" name="description" style="resize:none"
                     class="border p-2 w-full">{{ old('name', $job->description) }}</textarea>
             </div>
 
             <div>
-                <label class="block">Budget</label>
+                <label class="block">{{__("admin.budget")}}</label>
                 <input type="number" name="budget" value="{{ old('name', $job->budget) }}"
                     class="border p-2 w-full"></input>
             </div>
             <div>
-                <label class="block">Skills</label>
+                <label class="block">{{__("admin.skills")}}</label>
 
                 <select name="skills[]" id="skills" multiple
                     class="border block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -66,7 +66,7 @@
             </div>
 
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2">Update</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2">{{__("admin.update")}}</button>
         </form>
 
 
@@ -74,7 +74,7 @@
             @csrf
             @method('DELETE')
 
-            <label for="skills">Remove job skills</label>
+            <label for="skills">{{__("admin.remove_job_skills")}}</label>
             <select name="skills[]" id="skills" multiple
                 class="border block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 @foreach ($job->skills as $skill)
@@ -83,7 +83,7 @@
             </select>
 
             <button type="submit" class="mt-3 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-                Remove
+                {{__("admin.delete")}}
             </button>
         </form>
     </main>

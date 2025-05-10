@@ -4,7 +4,7 @@
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome, {{ auth()->user()->name }}</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ __('admin.welcome') }} {{ auth()->user()->name }}</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -33,11 +33,11 @@
         @endif
 
         <div class="bg-white rounded-xl shadow p-6 w-full max-w-xl">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Your Profile</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">{{__("admin.dashboard")}}</h2>
             <div class="space-y-2 text-gray-600">
-                <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
-                <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
-                <p><strong>Role:</strong> {{ implode(", ",auth()->user()->getRoleNames()->toArray())}}</p>
+                <p><strong>{{__("admin.name")}}:</strong> {{ auth()->user()->name }}</p>
+                <p><strong>{{__("admin.email")}}:</strong> {{ auth()->user()->email }}</p>
+                <p><strong>{{__("admin.role")}}:</strong> {{ implode(", ",auth()->user()->getRoleNames()->toArray())}}</p>
             </div>
         </div>
     </main>

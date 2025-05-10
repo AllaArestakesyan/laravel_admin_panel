@@ -4,7 +4,7 @@
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-2xl font-bold mb-4">Create Job</h1>
+        <h1 class="text-2xl font-bold mb-4">{{__("admin.create_job")}}</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -36,22 +36,22 @@
             @csrf
 
             <div>
-                <label class="block">Title</label>
+                <label class="block">{{__("admin.title")}}</label>
                 <input type="text" name="title" class="border p-2 w-full"  >
             </div>
 
             <div>
-                <label class="block">Description</label>
+                <label class="block">{{__("admin.description")}}</label>
                 <textarea type="text" style="resize:none" name="description" class="border p-2 w-full"></textarea>
             </div>
 
             <div>
-                <label class="block">Budget</label>
+                <label class="block">{{__("admin.budget")}}</label>
                 <input type="number" name="budget" class="border p-2 w-full"></input>
             </div>
 
             <div>
-                <label class="block">Skills</label>
+                <label class="block">{{__("admin.skills")}}</label>
 
                 <select name="skills[]" id="skills" multiple
                     class="border block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -62,7 +62,7 @@
             </div>
 
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2">Save</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2">{{__("admin.save")}}</button>
         </form>
 
     </main>

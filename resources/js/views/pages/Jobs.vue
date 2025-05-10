@@ -28,7 +28,8 @@ export default {
     async created() {
         try {
             await this.$store.dispatch("getJobs");
-            this.jobs = this.$store.getters['jobs']
+            this.jobs = this.$store.getters['jobs'];
+            
         } catch (error) {
             console.error("Failed to load jobs", error);
         }

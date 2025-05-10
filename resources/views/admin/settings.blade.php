@@ -4,7 +4,7 @@
 
 @section("content")
     <main class="flex-1 p-10">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">Settings</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">{{__("menu.settings")}}</h1>
 
         {{-- Success Message --}}
         @if (session('success'))
@@ -38,33 +38,33 @@
             @method('PUT')
 
             <div>
-                <label class="block">Name</label>
+                <label class="block">{{__("admin.name")}}</label>
                 <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" class="border p-2 w-full">
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2">Update</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2">{{__("admin.update")}}</button>
         </form>
 
 
-        <h3 class="text-3xl font-bold text-gray-800 mb-6">Update Password</h3>
+        <h3 class="text-3xl font-bold text-gray-800 mb-6">{{__("admin.update")}} {{__("admin.password")}}</h3>
         <form action="{{ route('admin.settings.updatePassword', auth()->user()->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
             <div>
-                <label class="block">Old password</label>
+                <label class="block">{{__("admin.old_password")}}</label>
                 <input type="password" name="old_password" class="border p-2 w-full">
             </div>
             <div>
-                <label class="block">Password</label>
+                <label class="block">{{__("admin.password")}}</label>
                 <input type="password" name="password" class="border p-2 w-full">
             </div>
             <div>
-                <label class="block">Confirm password</label>
+                <label class="block">{{__("admin.confirm_password")}}</label>
                 <input type="password" name="confirm_password" class="border p-2 w-full">
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2">Update</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2">{{__("admin.update")}}</button>
         </form>
     </main>
 @endsection
