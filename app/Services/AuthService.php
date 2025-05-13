@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Contracts\AuthServiceInterface;
+use App\Data\SignInUserData;
+use App\Data\StoreUserData;
+use App\Data\UserData;
 use App\Models\User;
 use Hash;
 
@@ -14,29 +17,30 @@ class AuthService implements AuthServiceInterface
      * @param array $data
      * @return User
      */
-    public function signUp(array $data): User
+    public function signUp(StoreUserData $data): UserData
     {
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name' => $data->name,
+            'email' => $data->email,
+            'password' => Hash::make($data->password),
         ]);
 
-        return $user;
+        return UserData::from($user);
     }
 
 
     /**
      * Summary of signIn
      * 
-     * @param array $data
+     * @var User|null $user
+     * @param SignInUserData $data
      * @return array{access_token: mixed, token_type: string|null}
      */
-    public function signIn(array $data): ?array
+    public function signIn(SignInUserData $data): ?array
     {
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $data->email)->first();
 
-        if (!$user || !Hash::check($data['password'], $user['password'])) {
+        if (!$user || !Hash::check($data->password, $user->password)) {
 
             return null;
         }

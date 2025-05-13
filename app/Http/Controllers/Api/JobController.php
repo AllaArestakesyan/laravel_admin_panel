@@ -6,11 +6,12 @@ use App\Contracts\JobServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class JobController extends Controller
 {
-     /**
+    /**
      * Inject the jobService into the controller.
      *
      * @param JobServiceInterface $jobService
@@ -25,7 +26,7 @@ class JobController extends Controller
      *
      * @return JsonResponse
      */
-    public function index():JsonResponse
+    public function index(): JsonResponse
     {
         $jobs = $this->jobService->findAll();
         return response()->json($jobs);
@@ -39,11 +40,17 @@ class JobController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $job = $this->jobService->findById($id);
-        if ($job) {
-            return response()->json($job);
+        try {
+
+            $job = $this->jobService->findById($id);
+            if ($job) {
+                return response()->json($job);
+            }
+            return response()->json(['message' => 'Job not found']);
+        } catch (ModelNotFoundException $e) {
+
+            return response()->json(['message' => 'Job not found']);
         }
-        return response()->json(['message' => 'Job not found'], 404);
     }
 
 }

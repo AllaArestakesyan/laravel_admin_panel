@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Contracts\JobServiceInterface;
+use App\Data\JobData;
+use App\Data\StoreJobData;
+use App\Data\UpdateJobData;
 use App\Models\Job;
 use Illuminate\Support\Collection;
 
@@ -11,23 +14,23 @@ class JobService implements JobServiceInterface
     /**
      * Create a new job.
      *
-     * @param array $data
-     * @return Job
+     * @param StoreJobData $data
+     * @return JobData
      */
-    public function create(array $data, int $managerId): Job
+    public function create(StoreJobData $data, int $managerId): JobData
     {
         $job = Job::create([
-            "title" => $data["title"],
-            "description" => $data["description"],
-            "budget" => $data["budget"],
+            "title" => $data->title,
+            "description" => $data->description,
+            "budget" => $data->budget,
             "assigned_to" => $managerId,
         ]);
 
-        if ($data['skills']) {
-            $job->skills()->attach($data["skills"]);
+        if ($data->skills) {
+            $job->skills()->attach($data->skills);
         }
 
-        return $job;
+        return JobData::from($job);
     }
 
     /**
@@ -37,42 +40,44 @@ class JobService implements JobServiceInterface
      */
     public function findAll(): Collection
     {
-        return Job::all();
+        return JobData::collect(Job::all());
     }
 
     /**
      * Get a job by its ID.
      *
      * @param int $id
-     * @return Job|null
+     * @return JobData|null
      */
-    public function findById(int $id): ?Job
+    public function findById(int $id): ?JobData
     {
-        return Job::with('skills')->find($id);
+        $job =  Job::with('skills')->findOrFail($id);
+
+        return JobData::from($job);
     }
 
     /**
      * Update an existing job.
      *
      * @param int $id
-     * @param array $data
-     * @return Job|null
+     * @param UpdateJobData $data
+     * @return JobData|null
      */
-    public function update(int $id, array $data): ?Job
+    public function update(int $id, UpdateJobData $data): ?JobData
     {
         $job = Job::find($id);
         if ($job) {
             $job->update([
-                "title" => $data["title"],
-                "description" => $data["description"],
-                "budget" => $data["budget"],
+                "title" => $data->title,
+                "description" => $data->description,
+                "budget" => $data->budget,
             ]);
 
-            if ($data['skills']) {
-                $job->skills()->attach($data["skills"]);
+            if ($data->skills) {
+                $job->skills()->attach($data->skills);
             }
 
-            return $job;
+            return JobData::from($job);
         }
 
         return null;
@@ -94,9 +99,9 @@ class JobService implements JobServiceInterface
      * 
      * @param array $data
      * @param int $id
-     * @return void
+     * @return JobData|null
      */
-    public function removeSkills(int $id, array $data): ?Job
+    public function removeSkills(int $id, array $data): ?JobData
     {
         $job = Job::find($id);
         if ($job) {
@@ -105,7 +110,7 @@ class JobService implements JobServiceInterface
                 $job->skills()->detach($data["skills"]);
             }
 
-            return $job;
+            return JobData::from($job);
         }
 
         return null;

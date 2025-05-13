@@ -2,7 +2,9 @@
 
 namespace App\Contracts;
 
-use App\Models\User;
+use App\Data\SignInUserData;
+use App\Data\StoreUserData;
+use App\Data\UserData;
 
 
 interface AuthServiceInterface
@@ -14,7 +16,7 @@ interface AuthServiceInterface
      * @param array $data
      * @return void
      */
-    public function signUp(array $data): User;
+    public function signUp(StoreUserData $data): UserData;
     
     /**
      * Summary of signIn
@@ -22,6 +24,6 @@ interface AuthServiceInterface
      * @param array $data
      * @return void
      */
-    public function signIn(array $data): ?array;
+    public function signIn(SignInUserData $data): ?array;
 
 }

@@ -2,12 +2,14 @@
 
 namespace App\Contracts;
 
-use App\Models\User;
+use App\Data\UpdateUserData;
+use App\Data\UpdateUserPasswordData;
+use App\Data\UserData;
 use Illuminate\Support\Collection;
 
 interface UserServiceInterface
 {
-   
+
     /**
      * Get all users.
      *
@@ -19,37 +21,37 @@ interface UserServiceInterface
      * Get a user by its ID.
      *
      * @param int $id
-     * @return User|null
+     * @return UserData|null
      */
-    public function findById(int $id): ?User;
+    public function findById(int $id): ?UserData;
 
     /**
      * Update an existing user.
      *
      * @param int $id
-     * @param array $data
-     * @return User|null
+     * @param UpdateUserData $data
+     * @return UserData|null
      */
-    public function update(int $id, array $data): ?User;
+    public function update(int $id, UpdateUserData $data): ?UserData;
 
-        /**
+    /**
      * Summary of update Password
      * 
      * @param int $id
-     * @param array $data
+     * @param UpdateUserPasswordData $data
      * @return void
      */
-    public function updatePassword(int $id, array $data): ?User;
-  
- 
+    public function updatePassword(int $id, UpdateUserPasswordData $data): ?UserData;
+
+
     /**
      * Update an existing user avatar.
      *
      * @param int $id
      * @param array $data
-     * @return User|null
+     * @return UserData|null
      */
-    public function uploadAvatar(int $id, mixed $data): ?User;
+    public function uploadAvatar(int $id, mixed $data): ?UserData;
 
     /**
      * Delete a user by its ID.

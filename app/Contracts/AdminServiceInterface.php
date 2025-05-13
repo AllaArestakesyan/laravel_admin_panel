@@ -2,6 +2,12 @@
 
 namespace App\Contracts;
 
+use App\Data\AdminData;
+use App\Data\ResponseData;
+use App\Data\SignInUserData;
+use App\Data\StoreAdminData;
+use App\Data\UpdateAdminData;
+use App\Data\UpdateUserPasswordData;
 use App\Models\Admin;
 use Illuminate\Support\Collection;
 
@@ -11,18 +17,18 @@ interface AdminServiceInterface
     /**
      * Summary of signUp
      * 
-     * @param array $data
-     * @return void
+     * @param StoreAdminData $data
+     * @return AdminData
      */
-    public function signUp(array $data): Admin;
+    public function signUp(StoreAdminData $data): AdminData;
 
     /**
      * Summary of signIn
      * 
-     * @param array $data
+     * @param SignInUserData $data
      * @return void
      */
-    public function signIn(array $data): ?array;
+    public function signIn(SignInUserData $data): ?array;
 
 
     /**
@@ -36,28 +42,28 @@ interface AdminServiceInterface
      * Get a Admin by its ID.
      *
      * @param int $id
-     * @return Admin|null
+     * @return AdminData|null
      */
-    public function findById(int $id): ?Admin;
+    public function findById(int $id): ?AdminData;
 
     /**
      * Update an existing admin.
      *
      * @param int $id
-     * @param array $data
-     * @return Admin|null
+     * @param UpdateAdminData $data
+     * @return AdminData|null
      */
-    public function update(int $id, array $data): ?Admin;
+    public function update(int $id, UpdateAdminData $data): ?AdminData;
   
   
     /**
      * Summary of update Password
      * 
      * @param int $id
-     * @param array $data
+     * @param UpdateUserPasswordData $data
      * @return void
      */
-    public function updatePassword(int $id, array $data): ?Admin;
+    public function updatePassword(int $id, UpdateUserPasswordData $data): ?AdminData;
   
     /**
      * Delete a admin by its ID.
@@ -73,7 +79,6 @@ interface AdminServiceInterface
      * @param int $id
      * @return void
      */
-    public function removeRole(int $id, string $role): array;
+    public function removeRole(int $id, string $role): ResponseData;
 
-    
 }

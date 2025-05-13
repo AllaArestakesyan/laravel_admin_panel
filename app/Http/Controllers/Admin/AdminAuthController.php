@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Contracts\AdminServiceInterface;
+use App\Data\SignInUserData;
+use App\Data\StoreAdminData;
+use App\Data\UpdateAdminData;
+use App\Data\UpdateUserPasswordData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInUserRequest;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -45,7 +51,7 @@ class AdminAuthController extends Controller
      */
     public function login(SignInUserRequest $request): mixed
     {
-        $data = $request->only('email', 'password');
+        $data = SignInUserData::from($request->validated());
         $auth = $this->adminService->signIn($data);
 
         if ($auth) {
@@ -75,7 +81,7 @@ class AdminAuthController extends Controller
      */
     public function register(StoreAdminRequest $request): mixed
     {
-        $data = $request->all();
+        $data = StoreAdminData::from($request->validated());
         $auth = $this->adminService->signUp($data);
 
         if ($auth) {
@@ -111,6 +117,7 @@ class AdminAuthController extends Controller
     public function profile(): View
     {
         $admin = Auth::guard('web')->user();
+
         return view('admin.profile', compact('admin'));
     }
 
@@ -134,6 +141,7 @@ class AdminAuthController extends Controller
     public function index(): View
     {
         $admins = $this->adminService->findAll();
+
         return view('admin.admins', compact('admins'));
     }
 
@@ -143,12 +151,19 @@ class AdminAuthController extends Controller
      * @param int $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $id): View
+    public function edit(int $id): View|RedirectResponse
     {
-        $admin = $this->adminService->findById($id);
-        $roles = Role::where('name', '!=', 'super-admin')->get();
+        try {
 
-        return view('admin.adminEdit', compact('admin', "roles"));
+            $admin = $this->adminService->findById($id);
+            $roles = Role::where('name', '!=', 'super-admin')->get();
+
+            return view('admin.adminEdit', compact('admin', "roles"));
+        } catch (ModelNotFoundException $e) {
+
+            return redirect()->route('admin.admins')->with('error', 'Failed to update admin.');
+
+        }
     }
 
     /**
@@ -158,9 +173,9 @@ class AdminAuthController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateAdminRequest $request, int $id)
+    public function update(UpdateAdminRequest $request, int $id): RedirectResponse
     {
-        $data = $request->all();
+        $data = UpdateAdminData::from($request->validated());
         $admin = $this->adminService->update($id, $data);
 
         if ($admin) {
@@ -178,9 +193,9 @@ class AdminAuthController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function settingsUpdate(UpdateAdminRequest $request)
+    public function settingsUpdate(UpdateAdminRequest $request): RedirectResponse
     {
-        $data = $request->all();
+        $data = UpdateAdminData::from($request->validated());
         $admin = $this->adminService->update($request->user()->id, $data);
 
         if ($admin) {
@@ -190,8 +205,8 @@ class AdminAuthController extends Controller
 
         return redirect()->route('admin.profile')->with('error', 'Failed to update admin.');
     }
-   
-   
+
+
     /**
      * Summary of settingsUpdatePassword
      * 
@@ -199,9 +214,9 @@ class AdminAuthController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function settingsUpdatePassword(UpdateUserPasswordRequest $request)
+    public function settingsUpdatePassword(UpdateUserPasswordRequest $request): RedirectResponse
     {
-        $data = $request->all();
+        $data = UpdateUserPasswordData::from($request->validated());
         $admin = $this->adminService->updatePassword($request->user()->id, $data);
 
         if ($admin) {
@@ -218,7 +233,7 @@ class AdminAuthController extends Controller
      * @param mixed $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         $success = $this->adminService->delete($id);
 
@@ -229,15 +244,18 @@ class AdminAuthController extends Controller
         return redirect()->route('admin.admins')->with('success', 'Admin deleted successfully.');
     }
 
-    public function removeRole(int $id, Request $request)
+    /**
+     * Summary of removeRole
+     * 
+     * @param int $id
+     * @param \Illuminate\Http\Request $request
+     * @return RedirectResponse
+     */
+    public function removeRole(int $id, Request $request): RedirectResponse
     {
         $role = $request->input('role');
         $data = $this->adminService->removeRole($id, $role);
 
-        if ($data['error']) {
-            return back()->with('error', $data['message']);
-        }
-
-        return back()->with('success', $data['message']);
+        return back()->with($data->error ? 'error' : 'success', $data->message);
     }
 }

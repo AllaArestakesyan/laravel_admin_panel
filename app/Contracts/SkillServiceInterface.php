@@ -2,7 +2,9 @@
 
 namespace App\Contracts;
 
-use App\Models\Skill;
+use App\Data\SkillData;
+use App\Data\StoreSkillData;
+use App\Data\UpdateSkillData;
 use Illuminate\Support\Collection;
 
 interface SkillServiceInterface
@@ -10,11 +12,11 @@ interface SkillServiceInterface
     /**
      * Create a new skill.
      *
-     * @param array $data
-     * @return Skill
+     * @param StoreSkillData $data
+     * @return SkillData
      * 
      */
-    public function create(array $data): Skill;
+    public function create(StoreSkillData $data): SkillData;
 
     /**
      * Get all Skills.
@@ -27,18 +29,18 @@ interface SkillServiceInterface
      * Get a skill by its ID.
      *
      * @param int $id
-     * @return Skill|null
+     * @return SkillData|null
      */
-    public function findById(int $id): ?Skill;
+    public function findById(int $id): ?SkillData;
 
     /**
      * Update an existing skill.
      *
      * @param int $id
      * @param array $data
-     * @return Skill|null
+     * @return SkillData|null
      */
-    public function update(int $id, array $data): ?Skill;
+    public function update(int $id, UpdateSkillData $data): ?SkillData;
 
     /**
      * Delete a skill by its ID.

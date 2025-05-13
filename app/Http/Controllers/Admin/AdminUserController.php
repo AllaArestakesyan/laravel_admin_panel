@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Contracts\UserServiceInterface;
+use App\Data\UpdateUserData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
+use Spatie\LaravelData\Exceptions\CannotCreateData;
 
 class AdminUserController extends Controller
 {
@@ -37,11 +40,20 @@ class AdminUserController extends Controller
      * @param int $id
      * @return View
      */
-    public function edit(int $id): View
+    public function edit(int $id): View|RedirectResponse
     {
-        $user = $this->userService->findById($id);
+        try {
 
-        return view('admin.userEdit', compact('user'));
+            $user = $this->userService->findById($id);
+
+            return view('admin.userEdit', compact('user'));
+        } catch (ModelNotFoundException $e) {
+
+            return redirect()->route('admin.users')->with('error', 'User not found.');
+        } catch (CannotCreateData $e) {
+
+            return redirect()->route('admin.users')->with('error', 'Invalid input.');
+        }
     }
 
     /**
@@ -53,15 +65,21 @@ class AdminUserController extends Controller
      */
     public function update(UpdateUserRequest $request, $id): RedirectResponse
     {
-        $data = $request->all();
-        $user = $this->userService->update($id, $data);
+        try {
+            $data = UpdateUserData::from($request->validated());
+            $user = $this->userService->update($id, $data);
 
-        if ($user) {
+            if ($user) {
 
-            return redirect()->route('admin.users')->with('success', 'User updated successfully.');
+                return redirect()->route('admin.users')->with('success', 'User updated successfully.');
+            }
+
+            return redirect()->route('admin.users')->with('error', 'Failed to update user.');
+
+        } catch (CannotCreateData $e) {
+
+            return redirect()->route('admin.users')->with('error', 'Invalid input.');
         }
-
-        return redirect()->route('admin.users')->with('error', 'Failed to update user.');
     }
 
     /**

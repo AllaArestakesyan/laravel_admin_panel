@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Contracts\UserServiceInterface;
+use App\Data\UpdateUserData;
+use App\Data\UpdateUserPasswordData;
+use App\Data\UserData;
 use App\Models\User;
 use Hash;
 use Illuminate\Support\Collection;
@@ -17,40 +20,41 @@ class UserService implements UserServiceInterface
      */
     public function findAll(): Collection
     {
-        return User::all();
+        return UserData::collect(User::all());
     }
 
     /**
      * Get a user by its ID.
      *
      * @param int $id
-     * @return User|null
+     * @return UserData|null
      */
-    public function findById(int $id): ?User
+    public function findById(int $id): ?UserData
     {
-        return User::find($id);
+        $user = User::findOrFail($id);
+
+        return UserData::from($user);
     }
 
     /**
      * Update an existing user.
      *
      * @param int $id
-     * @param array $data
-     * @return User|null
+     * @param UpdateUserData $data
+     * @return UserData|null
      */
-    public function update(int $id, array $data): ?User
+    public function update(int $id, UpdateUserData $data): ?UserData
     {
         $user = User::find($id);
         if ($user) {
             $user->update([
-                "name" => $data["name"],
+                "name" => $data->name,
             ]);
 
-            return $user;
+            return UserData::from($user);
         }
         return null;
     }
-
 
     /**
      * Summary of updatePassword
@@ -58,18 +62,18 @@ class UserService implements UserServiceInterface
      * @param int $id
      * @param array $data
      */
-    public function updatePassword(int $id, array $data): ?User
+    public function updatePassword(int $id, UpdateUserPasswordData $data): ?UserData
     {
         $user = User::find($id);
 
-        if (!$user || !Hash::check($data["old_password"], $user->password)) {
+        if (!$user || !Hash::check($data->old_password, $user->password)) {
 
             return null;
         }
-        $user->password = Hash::make($data["password"]);
+        $user->password = Hash::make($data->password);
         $user->save();
 
-        return $user;
+        return UserData::from($user);
     }
 
 
@@ -78,10 +82,10 @@ class UserService implements UserServiceInterface
      *
      * @param int $id
      * @param array $data
-     * @return User|null
+     * @return UserData|null
      */
 
-    public function uploadAvatar(int $id, mixed $file): ?User
+    public function uploadAvatar(int $id, mixed $file): ?UserData
     {
 
         $user = User::find($id);
@@ -95,7 +99,7 @@ class UserService implements UserServiceInterface
         $user->avatar = str_replace('public/', '', $path);
         $user->save();
 
-        return $user;
+        return UserData::from($user);
     }
 
     /**

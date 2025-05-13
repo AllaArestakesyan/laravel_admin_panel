@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Contracts\SkillServiceInterface;
+use App\Data\SkillData;
+use App\Data\StoreSkillData;
+use App\Data\UpdateSkillData;
 use App\Models\Skill;
 use Illuminate\Support\Collection;
 
@@ -14,11 +17,13 @@ class SkillService implements SkillServiceInterface
      * @param array $data
      * @return Skill
      */
-    public function create(array $data): Skill
+    public function create(StoreSkillData $data): SkillData
     {
-        return Skill::create([
-            "name"=> $data["name"],
+        $skill= Skill::create([
+            "name"=> $data->name
         ]);
+
+        return SkillData::from($skill);
     }
 
     /**
@@ -28,7 +33,7 @@ class SkillService implements SkillServiceInterface
      */
     public function findAll(): Collection
     {
-        return Skill::all(); 
+        return SkillData::collect(Skill::all()); 
     }
 
     /**
@@ -37,27 +42,29 @@ class SkillService implements SkillServiceInterface
      * @param int $id
      * @return Skill|null
      */
-    public function findById(int $id): ?Skill
+    public function findById(int $id): ?SkillData
     {
-        return Skill::with('jobs')->find($id);
+        $skill =  Skill::with('jobs')->findOrFail($id);
+
+        return SkillData::from($skill);
     }
 
     /**
      * Update an existing skill.
      *
      * @param int $id
-     * @param array $data
+     * @param UpdateSkillData $data
      * @return Skill|null
      */
-    public function update(int $id, array $data): ?Skill
+    public function update(int $id, UpdateSkillData $data): ?SkillData
     {
         $skill = Skill::find($id); 
         if ($skill) {
             $skill->update([
-                "name"=> $data["name"]
+                "name"=> $data->name
             ]); 
 
-            return $skill;
+            return SkillData::from($skill);
         }
         return null;
     }

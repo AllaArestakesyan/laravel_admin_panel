@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Contracts\JobServiceInterface;
 use App\Contracts\SkillServiceInterface;
+use App\Data\StoreJobData;
+use App\Data\UpdateJobData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RemoveJobSkillRequest;
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 
 class AdminJobController extends Controller
@@ -53,14 +56,20 @@ class AdminJobController extends Controller
      * Summary of edit
      * 
      * @param int $id
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id): View
+    public function edit(int $id): View|RedirectResponse
     {
-        $job = $this->jobService->findById($id);
-        $skills = $this->skillService->findAll();
+        try {
 
-        return view('admin.jobEdit', compact('job', 'skills'));
+            $job = $this->jobService->findById($id);
+            $skills = $this->skillService->findAll();
+
+            return view('admin.jobEdit', compact('job', 'skills'));
+        } catch (ModelNotFoundException $e) {
+
+            return redirect()->route('admin.jobs')->with('error', 'Failed to create job.');
+        }
     }
 
     /**
@@ -71,7 +80,7 @@ class AdminJobController extends Controller
      */
     public function store(StoreJobRequest $request): RedirectResponse
     {
-        $data = $request->all();
+        $data = StoreJobData::from($request->validated());
         $job = $this->jobService->create($data, $request->user()->id);
 
         if ($job) {
@@ -91,7 +100,7 @@ class AdminJobController extends Controller
      */
     public function update(UpdateJobRequest $request, int $id): RedirectResponse
     {
-        $data = $request->all();
+        $data = UpdateJobData::from($request->validated());
         $job = $this->jobService->update($id, $data);
 
         if ($job) {
@@ -123,7 +132,7 @@ class AdminJobController extends Controller
     public function removeSkills(RemoveJobSkillRequest $request, int $id)
     {
         $data = $request->all();
-        $job = $this->jobService->removeSkills(  $id, $data);
+        $job = $this->jobService->removeSkills($id, $data);
 
         if ($job) {
 

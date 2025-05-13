@@ -2,6 +2,9 @@
 
 namespace App\Contracts;
 
+use App\Data\JobData;
+use App\Data\StoreJobData;
+use App\Data\UpdateJobData;
 use App\Models\Job;
 use Illuminate\Support\Collection;
 
@@ -10,11 +13,11 @@ interface JobServiceInterface
     /**
      * Create a new job.
      *
-     * @param array $data
-     * @return Job
+     * @param StoreJobData $data
+     * @return JobData
      * 
      */
-    public function create(array $data, int $managerId): Job;
+    public function create(StoreJobData $data, int $managerId): JobData;
 
     /**
      * Get all jobs.
@@ -29,16 +32,16 @@ interface JobServiceInterface
      * @param int $id
      * @return Job|null
      */
-    public function findById(int $id): ?Job;
+    public function findById(int $id): ?JobData;
 
     /**
      * Update an existing job.
      *
      * @param int $id
-     * @param array $data
-     * @return Job|null
+     * @param UpdateJobData $data
+     * @return JobData|null
      */
-    public function update(int $id, array $data): ?Job;
+    public function update(int $id, UpdateJobData $data): ?JobData;
 
     /**
      * Delete a job by its ID.
@@ -53,7 +56,7 @@ interface JobServiceInterface
      * 
      * @param array $data
      * @param int $id
-     * @return Job|null
+     * @return JobData|null
      */
-    public function removeSkills(int $id, array $data): ?Job;
+    public function removeSkills(int $id, array $data): ?JobData;
 }

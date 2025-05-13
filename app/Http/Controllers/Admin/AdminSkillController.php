@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Contracts\SkillServiceInterface;
+use App\Data\StoreSkillData;
+use App\Data\UpdateSkillData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSkillRequest;
 use App\Http\Requests\UpdateSkillRequest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 
 class AdminSkillController extends Controller
@@ -46,13 +49,19 @@ class AdminSkillController extends Controller
      * Summary of edit
      * 
      * @param int $id
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function edit(int $id): View
+    public function edit(int $id): View|RedirectResponse
     {
-        $skill = $this->skillService->findById($id);
+        try {
 
-        return view('admin.skillEdit', compact('skill'));
+            $skill = $this->skillService->findById($id);
+
+            return view('admin.skillEdit', compact('skill'));
+        } catch (ModelNotFoundException $e) {
+
+            return redirect()->route('admin.skills')->with('error', 'Failed to create skill.');
+        }
     }
 
     /**
@@ -63,7 +72,7 @@ class AdminSkillController extends Controller
      */
     public function store(StoreSkillRequest $request): RedirectResponse
     {
-        $data = $request->all();
+        $data = StoreSkillData::from($request->validated());
         $skill = $this->skillService->create($data);
 
         if ($skill) {
@@ -74,7 +83,7 @@ class AdminSkillController extends Controller
         return redirect()->route('admin.skills')->with('error', 'Failed to create skill.');
     }
 
-       /**
+    /**
      * Summary of update
      * 
      * @param UpdateSkillRequest $request
@@ -83,15 +92,21 @@ class AdminSkillController extends Controller
      */
     public function update(UpdateSkillRequest $request, $id): RedirectResponse
     {
-        $data = $request->all();
-        $skill = $this->skillService->update($id, $data);
+        try{
 
-        if ($skill) {
+            $data = UpdateSkillData::from($request->validated());
+            $skill = $this->skillService->update($id, $data);
+            
+            if ($skill) {
+                
+                return redirect()->route('admin.skills')->with('success', 'Skill updated successfully.');
+            }
+            
+            return redirect()->route('admin.skills')->with('error', 'Failed to update skill.');
+        } catch (ModelNotFoundException $e) {
 
-            return redirect()->route('admin.skills')->with('success', 'Skill updated successfully.');
+            return redirect()->route('admin.skills')->with('error', 'Skill not found.');
         }
-
-        return redirect()->route('admin.skills')->with('error', 'Failed to update skill.');
     }
 
     /**

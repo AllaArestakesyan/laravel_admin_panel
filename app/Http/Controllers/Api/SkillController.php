@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Contracts\SkillServiceInterface;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SkillController extends Controller
 {
@@ -36,10 +37,16 @@ class SkillController extends Controller
      */
     public function show($id)
     {
-        $skill = $this->skillService->findById($id);
-        if ($skill) {
-            return response()->json($skill);
+        try{
+
+            $skill = $this->skillService->findById($id);
+            if ($skill) {
+                return response()->json($skill);
+            }
+            return response()->json(['message' => 'Skill not found']);
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(['message' => 'Skill not found']);
         }
-        return response()->json(['message' => 'Skill not found'], 404);
     }
 }

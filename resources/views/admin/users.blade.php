@@ -32,7 +32,6 @@
             </div>
         @endif
 
-
         <table class="min-w-full bg-white border border-gray-200 shadow">
             <thead>
                 <tr class="bg-gray-100 text-left">

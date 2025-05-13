@@ -100,8 +100,13 @@ export default {
             try {
                 const data = await this.$store.dispatch('updateCurrentUserPasswordData', values)
                 console.log(data);
+                if(data.message){
+                    
+                    alert('Login failed')
+                }else{
 
-                alert('Update password success!')
+                    alert('Update password success!')
+                }
             } catch (e) {
                 alert('Login failed')
             }
