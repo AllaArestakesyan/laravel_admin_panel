@@ -39,7 +39,7 @@ interface UserServiceInterface
      * 
      * @param int $id
      * @param UpdateUserPasswordData $data
-     * @return void
+     * @return UserData
      */
     public function updatePassword(int $id, UpdateUserPasswordData $data): ?UserData;
 

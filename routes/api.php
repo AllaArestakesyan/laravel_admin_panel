@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\UserController;
@@ -32,9 +33,15 @@ Route::prefix('v1')->group(function () {
             Route::get("/{id}", [SkillController::class, "show"]);
         });
 
-        Route::prefix(prefix: "jobs")->group(function () {
+        Route::prefix( "jobs")->group(function () {
             Route::get("", [JobController::class, "index"]);
             Route::get("/{id}", [JobController::class, "show"]);
+        });
+      
+        Route::prefix( "countries")->group(function () {
+            Route::get("", [CountryController::class, "index"]);//?page=2&limit=10
+            Route::post("", [CountryController::class, "store"]);
+            Route::delete("/{id}", [CountryController::class, "destroy"]);
         });
     });
 });

@@ -14,7 +14,7 @@ interface AuthServiceInterface
      * Summary of signUp
      * 
      * @param array $data
-     * @return void
+     * @return UserData
      */
     public function signUp(StoreUserData $data): UserData;
     
@@ -22,7 +22,7 @@ interface AuthServiceInterface
      * Summary of signIn
      * 
      * @param array $data
-     * @return void
+     * @return array
      */
     public function signIn(SignInUserData $data): ?array;
 

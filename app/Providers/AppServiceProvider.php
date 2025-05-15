@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Contracts\AdminServiceInterface;
 use App\Contracts\AuthServiceInterface;
+use App\Contracts\CountryServiceInterface;
 use App\Contracts\JobServiceInterface;
 use App\Contracts\SkillServiceInterface;
 use App\Contracts\UserServiceInterface;
 use App\Services\AdminService;
 use App\Services\AuthService;
+use App\Services\CountryService;
 use App\Services\JobService;
 use App\Services\SkillService;
 use App\Services\UserService;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(SkillServiceInterface::class, SkillService::class);
         $this->app->bind(JobServiceInterface::class, JobService::class);
+        $this->app->bind(CountryServiceInterface::class, CountryService::class);
     }
 
     /**

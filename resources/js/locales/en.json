@@ -1,6 +1,7 @@
 {
   "menu": {
     "Profile": "Profile",
+    "Countries":"Countries",
     "Users": "Users",
     "Skills": "Skills",
     "Jobs": "Jobs",
@@ -9,7 +10,8 @@
   },
   "profile":{
     "uploadAvatar":"Upload New Avatar",
-    "email":"Email"
+    "email":"Email",
+    "search":"Search ..."
   },
   "login": {
     "login": "Login",

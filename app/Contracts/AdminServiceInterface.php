@@ -26,7 +26,7 @@ interface AdminServiceInterface
      * Summary of signIn
      * 
      * @param SignInUserData $data
-     * @return void
+     * @return array
      */
     public function signIn(SignInUserData $data): ?array;
 
@@ -61,7 +61,7 @@ interface AdminServiceInterface
      * 
      * @param int $id
      * @param UpdateUserPasswordData $data
-     * @return void
+     * @return AdminData
      */
     public function updatePassword(int $id, UpdateUserPasswordData $data): ?AdminData;
   
@@ -77,7 +77,7 @@ interface AdminServiceInterface
      * Summary of removeRole
      * 
      * @param int $id
-     * @return void
+     * @return ResponseData
      */
     public function removeRole(int $id, string $role): ResponseData;
 
