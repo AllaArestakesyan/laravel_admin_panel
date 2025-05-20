@@ -12,10 +12,6 @@ Route::get('/testroute', function() {
     $name = "Anna";
 
     Mail::to('alla.arestakesyan@gmail.com')->send(new MyTestEmail($name));
-
-    // $name = "Anna";
-
-    // Mail::to('alla.arestakesyan@gmail.com')->send(new SendEmail($name, "admin delete your job", "delete job"));
 });
 
 
