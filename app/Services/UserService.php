@@ -6,9 +6,11 @@ use App\Contracts\UserServiceInterface;
 use App\Data\UpdateUserData;
 use App\Data\UpdateUserPasswordData;
 use App\Data\UserData;
+use App\Mail\SendEmail;
 use App\Models\User;
 use Hash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 
 class UserService implements UserServiceInterface
 {
@@ -110,6 +112,12 @@ class UserService implements UserServiceInterface
      */
     public function delete(int $id): bool
     {
+        $user = User::find($id);
+        if($user){
+            Mail::to('alla.arestakesyan@gmail.com')
+            ->send(new SendEmail($user->name, "Your account has been deleted.", "Delete Account"));
+
+        }
         return User::destroy($id) > 0;
     }
 }

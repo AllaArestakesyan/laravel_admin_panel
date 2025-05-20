@@ -5,6 +5,18 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\UserController;
+use App\Mail\MyTestEmail;
+
+
+Route::get('/testroute', function() {
+    $name = "Anna";
+
+    Mail::to('alla.arestakesyan@gmail.com')->send(new MyTestEmail($name));
+
+    // $name = "Anna";
+
+    // Mail::to('alla.arestakesyan@gmail.com')->send(new SendEmail($name, "admin delete your job", "delete job"));
+});
 
 
 Route::prefix('v1')->group(function () {

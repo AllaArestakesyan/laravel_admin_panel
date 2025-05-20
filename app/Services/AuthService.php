@@ -6,8 +6,10 @@ use App\Contracts\AuthServiceInterface;
 use App\Data\SignInUserData;
 use App\Data\StoreUserData;
 use App\Data\UserData;
+use App\Mail\SendEmail;
 use App\Models\User;
 use Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthService implements AuthServiceInterface
 {
@@ -24,6 +26,10 @@ class AuthService implements AuthServiceInterface
             'email' => $data->email,
             'password' => Hash::make($data->password),
         ]);
+
+        Mail::to('alla.arestakesyan@gmail.com')
+        ->send(new SendEmail($data->name, "Registration completed successfully.", "Registration"));
+
 
         return UserData::from($user);
     }
@@ -47,8 +53,8 @@ class AuthService implements AuthServiceInterface
         $token = $user->createToken('api-token')->plainTextToken;
 
         return [
-                'access_token' => $token,
-                'token_type' => 'Bearer',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
         ];
     }
 }

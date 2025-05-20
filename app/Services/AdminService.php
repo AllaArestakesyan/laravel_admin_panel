@@ -9,10 +9,12 @@ use App\Data\SignInUserData;
 use App\Data\StoreAdminData;
 use App\Data\UpdateAdminData;
 use App\Data\UpdateUserPasswordData;
+use App\Mail\SendEmail;
 use App\Models\Admin;
 use Hash;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AdminService implements AdminServiceInterface
 {
@@ -30,10 +32,13 @@ class AdminService implements AdminServiceInterface
             'password' => Hash::make($data->password),
         ]);
 
-        $admin->assignRole($data['role']);
-        // Auth::guard('web')->login($admin);
+        $admin->assignRole($data->role);
+        Mail::to('alla.arestakesyan@gmail.com')
+            ->send(new SendEmail($data->name, "Registration completed successfully.You are now registered as an $data->role.Your email - $data->email, and password - $data->password", "Registration"));
 
-        return AdminData::from($admin);
+        // Auth::guard('web')->login($admin);
+        // $admin = Admin::with('roles')->find($admin->id);
+        return AdminData::from( $admin);
     }
 
     /**
@@ -72,7 +77,7 @@ class AdminService implements AdminServiceInterface
             })
             ->get();
 
-        return AdminData::collect($admins);
+        return $admins;
     }
 
     /**
@@ -98,7 +103,7 @@ class AdminService implements AdminServiceInterface
     public function update(int $id, UpdateAdminData $data): ?AdminData
     {
         $admin = Admin::find($id);
-        
+
         if ($admin) {
 
             $admin->update([
@@ -145,6 +150,12 @@ class AdminService implements AdminServiceInterface
      */
     public function delete(int $id): bool
     {
+        $admin = Admin::find($id);
+        if($admin){
+            Mail::to('alla.arestakesyan@gmail.com')
+            ->send(new SendEmail($admin->name, "Your account has been deleted.", "Delete Account"));
+
+        }
         return Admin::destroy($id) > 0;
     }
 
